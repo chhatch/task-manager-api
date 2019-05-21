@@ -11,6 +11,7 @@ const auth = async (req, res, next) => {
             res.status(404).send('User not authenticated.')
         }
 
+        req.token = token
         req.user = user
         next()
     } catch(e) {
