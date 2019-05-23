@@ -5,7 +5,6 @@ const router = new express.Router()
 const User = require('../db/models/user')
 
 const upload = multer({
-    dest: 'avatars',
     limits: {
         fileSize: 1000000
     },
@@ -64,6 +63,8 @@ router.post('/user/logoutAll', auth,  async (req, res) => {
 })
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+    req.user.avatar = req.file.buffer
+    await req.user.save()
     res.send()
 }, (e, req, res, next) => {
     res.status(400).send({error: e.message})
