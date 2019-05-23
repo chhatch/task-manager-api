@@ -65,6 +65,8 @@ router.post('/user/logoutAll', auth,  async (req, res) => {
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
     res.send()
+}, (e, req, res, next) => {
+    res.status(400).send({error: e.message})
 })
 
 router.get('/users/me', auth, async (req, res) => {
