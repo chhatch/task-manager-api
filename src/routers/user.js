@@ -1,5 +1,6 @@
 const express = require('express')
 const multer = require('multer')
+const sharp = require('sharp')
 const auth = require('../middleware/auth')
 const router = new express.Router() 
 const User = require('../db/models/user')
@@ -63,10 +64,11 @@ router.post('/user/logoutAll', auth,  async (req, res) => {
 })
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-    req.user.avatar = req.file.buffer
+    const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer()
+    req.user.avatar = buffer
     await req.user.save()
     res.send()
-}, (e, req, res, next) => {
+    }, (e, req, res, next) => {
     res.status(400).send({error: e.message})
 })
 
